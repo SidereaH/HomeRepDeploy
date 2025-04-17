@@ -1,6 +1,7 @@
 deploy:
   stage: deploy
   script:
-    - sudo docker stack deploy -c docker-compose.prod.yml homerep
+    - envsubst < docker-compose.prod.yml > docker-compose.gen.yml
+    - sudo docker stack deploy -c docker-compose.gen.yml homerep
   tags:
     - cloudru1
