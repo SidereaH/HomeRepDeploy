@@ -34,7 +34,7 @@ services:
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=postgres
       - SPRING_JPA_HIBERNATE_DDL_AUTO=create-drop
-      - HOMEREP_SECRET=yo78$$dontCrackPleaseASdujisdufasbasu
+      - HOMEREP_SECRET=yo78DOlDodontCrackPleaseASdujisdufasbasu
       - HOMEREP_LIFETIME=600000
       - SERVER_ADDRESS=0.0.0.0
       - SERVER_PORT=8081
