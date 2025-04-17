@@ -1,0 +1,291 @@
+version: '3.8'
+
+services:
+  postgres_container_authtest:
+    image: postgres:15
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+      PGDATA: /data/postgres
+    volumes:
+      - postgres-data:/data/postgres
+      - ./initdb:/docker-entrypoint-initdb.d
+    ports:
+      - target: 5432
+        published: 5434
+        protocol: tcp
+        mode: host
+    networks:
+      - homerep-network
+
+  auth-service:
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    image: registry.gitlab.com/homerep/auth_server
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres_container_authtest:5432/homerep_auth
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=create-drop
+      - HOMEREP_SECRET=yo78$$dontCrackPleaseASdujisdufasbasu
+      - HOMEREP_LIFETIME=600000
+      - SERVER_ADDRESS=0.0.0.0
+      - SERVER_PORT=8081
+      - HOMEREP_USERSERVICE=http://user-service:8083
+      - HOMEREP_ORDERSERVICE=http://order-service:8084
+    ports:
+      - target: 8081
+        published: 8081
+        protocol: tcp
+        mode: host
+    networks:
+      - homerep-network
+    depends_on:
+      - postgres_container_authtest
+
+  user-service:
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    image: registry.gitlab.com/homerep/userservice
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres_container_authtest:5432/homerep_userservice
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - HOMEREP_SECRET=yo78$$dontCrackPleaseASdujisdufasbasu
+      - HOMEREP_LIFETIME=600000
+      - SERVER_PORT=8083
+    ports:
+      - target: 8083
+        published: 8083
+        protocol: tcp
+        mode: host
+    networks:
+      - homerep-network
+    depends_on:
+      - postgres_container_authtest
+
+  redis-photos:
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    image: redis:latest
+    environment:
+      - REDIS_PASSWORD=${DB_PASSWORD_CLOUD}
+    command: [ "redis-server", "--requirepass", "${DB_PASSWORD_CLOUD}" ]
+    ports:
+      - target: 6379
+        published: 6379
+        protocol: tcp
+        mode: host
+    networks:
+      - homerep-network
+    volumes:
+      - redis_data:/data
+
+  go-cloud-app:
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    image: registry.gitlab.com/homerep/image_cloud
+    environment:
+      - API_PORT=${API_PORT_CLOUD}
+      - DB_ADDRESS=${DB_ADDRESS_CLOUD}
+      - DB_PASSWORD=${DB_PASSWORD_CLOUD}
+      - DB_NAME=${DB_NAME_CLOUD}
+      - API_ADDRESS=${API_ADDRESS_CLOUD}
+    ports:
+      - target: ${API_PORT_CLOUD}
+        published: ${API_PORT_CLOUD}
+        protocol: tcp
+        mode: host
+    networks:
+      - homerep-network
+    depends_on:
+      - redis-photos
+
+  timescale_location_db:
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    image: timescale/timescaledb:latest-pg15
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: location_service
+    ports:
+      - target: 5432
+        published: 5433
+        protocol: tcp
+        mode: host
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", "user", "-d", "location_service" ]
+      interval: 10s
+      retries: 5
+      start_period: 10s
+    networks:
+      - homerep-network
+
+  grpc-location-server:
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    image: registry.gitlab.com/homerep/user_location_service
+    ports:
+      - target: 50051
+        published: 50051
+        protocol: tcp
+        mode: host
+    environment:
+      DB_HOST: timescale_location_db
+      DB_PORT: 5432
+      DB_USER: user
+      DB_PASSWORD: password
+      DB_NAME: location_service
+    networks:
+      - homerep-network
+    depends_on:
+      - timescale_location_db
+
+  zookeeper:
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    image: confluentinc/cp-zookeeper:7.4.0
+    ports:
+      - target: 2181
+        published: 2181
+        protocol: tcp
+        mode: host
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    networks:
+      - homerep-network
+
+  kafka1:
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    image: confluentinc/cp-kafka:7.4.0
+    ports:
+      - target: 9092
+        published: 9092
+        protocol: tcp
+        mode: host
+      - target: 19092
+        published: 19092
+        protocol: tcp
+        mode: host
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka1:19092,PLAINTEXT_HOST://kafka1:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    networks:
+      - homerep-network
+    depends_on:
+      - zookeeper
+
+  kafka2:
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    image: confluentinc/cp-kafka:7.4.0
+    ports:
+      - target: 9093
+        published: 9093
+        protocol: tcp
+        mode: host
+      - target: 19093
+        published: 19093
+        protocol: tcp
+        mode: host
+    environment:
+      KAFKA_BROKER_ID: 2
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka2:19093,PLAINTEXT_HOST://kafka2:9093
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    networks:
+      - homerep-network
+    depends_on:
+      - zookeeper
+
+  kafka-ui:
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    image: provectuslabs/kafka-ui:latest
+    ports:
+      - target: 8080
+        published: 8080
+        protocol: tcp
+        mode: host
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local-kafka
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka1:19092,kafka2:19093
+      KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181
+    networks:
+      - homerep-network
+    depends_on:
+      - kafka1
+      - kafka2
+
+  order-service:
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    image: aliquamsiderea/homerep_orderservice:0.2.0
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres_container_authtest:5432/homerep_orders
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka1:19092,kafka2:19093
+      - SPRING_KAFKA_PRODUCER_KEY_SERIALIZER=org.apache.kafka.common.serialization.StringSerializer
+      - SPRING_KAFKA_PRODUCER_VALUE_SERIALIZER=org.springframework.kafka.support.serializer.JsonSerializer
+      - GRPC_SERVER_PORT=9091
+      - SERVER_PORT=8084
+    ports:
+      - target: 8084
+        published: 8084
+        protocol: tcp
+        mode: host
+    networks:
+      - homerep-network
+    depends_on:
+      - postgres_container_authtest
+
+networks:
+  homerep-network:
+    driver: overlay
+
+volumes:
+  postgres-data:
+    driver: local
+  pgadmin-data:
+    driver: local
+  redis_data:
+    driver: local
