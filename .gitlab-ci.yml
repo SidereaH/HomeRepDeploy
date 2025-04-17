@@ -18,4 +18,4 @@ deploy:
     - git pull
     - docker stack deploy -c docker-compose.prod.yml homerep
   tags:
-    - cloudru
+    - cloudru1
