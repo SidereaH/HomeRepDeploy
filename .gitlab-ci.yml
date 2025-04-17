@@ -1,7 +1,7 @@
 deploy:
   stage: deploy
   script:
-    - cd /home/runner_user/deploy
+    - cd /home/user/deploy
     - git pull
     - docker stack deploy -c docker-compose.prod.yml homerep
   tags:
