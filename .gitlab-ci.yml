@@ -1,21 +1,6 @@
 deploy:
   stage: deploy
   script:
-    - echo "🔍 WHOAMI:"
-    - whoami
-    - echo "📁 CURRENT DIR:"
-    - pwd
-    - echo "📄 FILES IN DIR:"
-    - ls -la
-    - echo "🏠 HOME:"
-    - echo $HOME
-    - echo "🌍 ENV VARS:"
-    - env
-    - echo "🐙 GIT REMOTE:"
-    - git remote -v
-    - echo "🚀 START DEPLOY:"
-    - cd /home/gitlab-runner/deploy
-    - git pull
     - docker stack deploy -c docker-compose.prod.yml homerep
   tags:
     - cloudru1
