@@ -1,6 +1,10 @@
+variables:
+  CI_REGISTRY: "registry.gitlab.com"
+
 deploy:
   stage: deploy
   script:
+    - sudo docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - envsubst < docker-compose.prod.yml > docker-compose.gen.yml
     - sudo docker stack deploy -c docker-compose.gen.yml homerep
   tags:
