@@ -52,6 +52,19 @@ deploy:
       else
         echo "Stack 'homerep' not found. Skipping removal."
       fi
+    
+    - |
+      echo "Creating Docker network 'homerep-network'..."
+      if sudo docker network ls | grep -q 'homerep-network'; then
+        echo "Network 'homerep-network' already exists. Skipping creation."
+      else
+        if sudo docker network create --driver overlay homerep-network; then
+          echo "Network 'homerep-network' created successfully."
+        else
+          echo "ERROR: Failed to create network 'homerep-network' (check permissions or Docker daemon status)." >&2
+          exit 1
+        fi
+      fi
 
     - |
       echo "Trying to delete old homerep images..."
