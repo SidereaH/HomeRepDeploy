@@ -77,8 +77,7 @@ services:
     networks:
       - homerep-network
     depends_on:
-      postgres_container_authtest:
-        condition: service_healthy
+      - postgres_container_authtest
 
   redis-photos:
     deploy:
@@ -164,8 +163,7 @@ services:
     networks:
       - homerep-network
     depends_on:
-      timescale_location_db:
-        condition: service_healthy
+      - timescale_location_db
 
   zookeeper:
     deploy:
@@ -283,8 +281,7 @@ services:
     networks:
       - homerep-network
     depends_on:
-      postgres_container_authtest:
-        condition: service_healthy
+      - postgres_container_authtest
 
 networks:
   homerep-network:
