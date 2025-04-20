@@ -33,7 +33,7 @@ services:
       replicas: 1
       restart_policy:
         condition: on-failure
-    image: registry.gitlab.com/homerep/auth_server/{AUTH_APP_TAG}
+    image: registry.gitlab.com/homerep/auth_server/${AUTH_APP_TAG}
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://homerep_postgres_container_authtest:5432/homerep_auth
       - SPRING_DATASOURCE_USERNAME=postgres
