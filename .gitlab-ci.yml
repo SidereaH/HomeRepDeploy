@@ -41,8 +41,33 @@ deploy:
     - echo "DB_ADDRESS_CLOUD=$DB_ADDRESS_CLOUD"
     - echo "DB_NAME_CLOUD=$DB_NAME_CLOUD"
     - echo "API_ADDRESS_CLOUD=$API_ADDRESS_CLOUD"
-    - sudo docker stack rm homerep
-    - sudo docker rmi $(docker images -q --filter "reference=*homerep*")
+    - |
+      echo "Removing Docker stack 'homerep'..."
+      if sudo docker stack ls | grep -q 'homerep'; then
+        if sudo docker stack rm homerep; then
+          echo "Stack 'homerep' removed successfully."
+        else
+          echo "ERROR: Failed to remove stack 'homerep' (check permissions or stack status)." >&2
+        fi
+      else
+        echo "Stack 'homerep' not found. Skipping removal."
+      fi
+
+    - |
+      echo "Trying to delete old homerep images..."
+      if sudo docker images --filter "reference=*homerep*" -q > /dev/null 2>&1; then
+        IMAGES=$(sudo docker images --filter "reference=*homerep*" -q)
+        if [ -n "$IMAGES" ]; then
+          echo "Found images to delete:"
+          echo "$IMAGES"
+          sudo docker rmi $IMAGES || echo "Some images could not be removed (maybe in use or permission denied)."
+        else
+          echo "No images matching '*homerep*' found."
+        fi
+      else
+        echo "WARNING: Docker daemon is not accessible. Skipping image cleanup."
+      fi
+
     
     # Генерация docker-compose файла
     - envsubst < docker-compose.prod.yml > docker-compose.gen.yml
