@@ -68,7 +68,8 @@ deploy:
         echo "WARNING: Docker daemon is not accessible. Skipping image cleanup."
       fi
 
-    
+    - sleep 10
+
     # Генерация docker-compose файла
     - envsubst < docker-compose.prod.yml > docker-compose.gen.yml
     
