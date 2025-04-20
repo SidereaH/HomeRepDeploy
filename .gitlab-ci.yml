@@ -5,7 +5,13 @@ deploy:
   stage: deploy
   script:
     - sudo docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - export DB_PASSWORD_CLOUD=$DB_PASSWORD_CLOUD
+    - export API_PORT_CLOUD=$API_PORT_CLOUD
+    - export DB_ADDRESS_CLOUD=$DB_ADDRESS_CLOUD
+    - export DB_NAME_CLOUD=$DB_NAME_CLOUD
+    - export API_ADDRESS_CLOUD=$API_ADDRESS_CLOUD
     - envsubst < docker-compose.prod.yml > docker-compose.gen.yml
     - sudo docker stack deploy -c docker-compose.gen.yml homerep
   tags:
     - cloudru1
+  
