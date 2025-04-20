@@ -41,6 +41,8 @@ deploy:
     - echo "DB_ADDRESS_CLOUD=$DB_ADDRESS_CLOUD"
     - echo "DB_NAME_CLOUD=$DB_NAME_CLOUD"
     - echo "API_ADDRESS_CLOUD=$API_ADDRESS_CLOUD"
+    - sudo docker stack rm homerep
+    - sudo docker rmi $(docker images -q --filter "reference=*homerep*")
     
     # Генерация docker-compose файла
     - envsubst < docker-compose.prod.yml > docker-compose.gen.yml
