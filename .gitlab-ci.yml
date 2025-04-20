@@ -5,20 +5,47 @@ deploy:
   stage: deploy
   script:
     - sudo docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    
+    # Логирование всех переменных
+    - echo "USER_SERVICE_APP_TAG=${USER_SERVICE_APP_TAG:-latest}"
+    - echo "AUTH_APP_TAG=${AUTH_APP_TAG:-latest}"
+    - echo "ORDER_SERVICE_APP_TAG=${ORDER_SERVICE_APP_TAG:-latest}"
+    - echo "LOCATION_APP_TAG=${LOCATION_APP_TAG:-latest}"
+    - echo "CLOUD_APP_TAG=${CLOUD_APP_TAG:-latest}"
+    - echo "DB_PASSWORD_CLOUD=$DB_PASSWORD_CLOUD"
+    - echo "API_PORT_CLOUD=$API_PORT_CLOUD"
+    - echo "DB_ADDRESS_CLOUD=$DB_ADDRESS_CLOUD"
+    - echo "DB_NAME_CLOUD=$DB_NAME_CLOUD"
+    - echo "API_ADDRESS_CLOUD=$API_ADDRESS_CLOUD"
+    
+    # Устанавливаем переменные
     - export USER_SERVICE_APP_TAG=${USER_SERVICE_APP_TAG:-latest}
     - export AUTH_APP_TAG=${AUTH_APP_TAG:-latest}
     - export ORDER_SERVICE_APP_TAG=${ORDER_SERVICE_APP_TAG:-latest}
     - export LOCATION_APP_TAG=${LOCATION_APP_TAG:-latest}
     - export CLOUD_APP_TAG=${CLOUD_APP_TAG:-latest}
-
-    
     - export DB_PASSWORD_CLOUD=$DB_PASSWORD_CLOUD
     - export API_PORT_CLOUD=$API_PORT_CLOUD
     - export DB_ADDRESS_CLOUD=$DB_ADDRESS_CLOUD
     - export DB_NAME_CLOUD=$DB_NAME_CLOUD
     - export API_ADDRESS_CLOUD=$API_ADDRESS_CLOUD
+    
+    # Проверяем, что переменные правильно установлены
+    - echo "USER_SERVICE_APP_TAG=${USER_SERVICE_APP_TAG}"
+    - echo "AUTH_APP_TAG=${AUTH_APP_TAG}"
+    - echo "ORDER_SERVICE_APP_TAG=${ORDER_SERVICE_APP_TAG}"
+    - echo "LOCATION_APP_TAG=${LOCATION_APP_TAG}"
+    - echo "CLOUD_APP_TAG=${CLOUD_APP_TAG}"
+    - echo "DB_PASSWORD_CLOUD=$DB_PASSWORD_CLOUD"
+    - echo "API_PORT_CLOUD=$API_PORT_CLOUD"
+    - echo "DB_ADDRESS_CLOUD=$DB_ADDRESS_CLOUD"
+    - echo "DB_NAME_CLOUD=$DB_NAME_CLOUD"
+    - echo "API_ADDRESS_CLOUD=$API_ADDRESS_CLOUD"
+    
+    # Генерация docker-compose файла
     - envsubst < docker-compose.prod.yml > docker-compose.gen.yml
+    
+    # Деплой в Docker Swarm
     - sudo docker stack deploy -c docker-compose.gen.yml homerep
   tags:
     - cloudru1
-  
