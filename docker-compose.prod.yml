@@ -53,8 +53,7 @@ services:
     networks:
       - homerep-network
     depends_on:
-      - postgres_container_authtest:
-          condition: service_healthy
+      - postgres_container_authtest
 
   user-service:
     deploy:
