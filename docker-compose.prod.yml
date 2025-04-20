@@ -22,6 +22,11 @@ services:
         mode: host
     networks:
       - homerep-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   auth-service:
     deploy:
@@ -48,7 +53,8 @@ services:
     networks:
       - homerep-network
     depends_on:
-      - postgres_container_authtest
+      postgres_container_authtest:
+        condition: service_healthy
 
   user-service:
     deploy:
@@ -72,7 +78,8 @@ services:
     networks:
       - homerep-network
     depends_on:
-      - postgres_container_authtest
+      postgres_container_authtest:
+        condition: service_healthy
 
   redis-photos:
     deploy:
@@ -158,7 +165,8 @@ services:
     networks:
       - homerep-network
     depends_on:
-      - timescale_location_db
+      timescale_location_db:
+        condition: service_healthy
 
   zookeeper:
     deploy:
@@ -276,7 +284,8 @@ services:
     networks:
       - homerep-network
     depends_on:
-      - postgres_container_authtest
+      postgres_container_authtest:
+        condition: service_healthy
 
 networks:
   homerep-network:
