@@ -43,8 +43,8 @@ services:
       - HOMEREP_LIFETIME=600000
       - SERVER_ADDRESS=0.0.0.0
       - SERVER_PORT=8081
-      - HOMEREP_USERSERVICE=http://homerep_user-service:8083
-      - HOMEREP_ORDERSERVICE=http://homerep_order-service:8084
+      - HOMEREP_USERSERVICE=http://localhost:8083
+      - HOMEREP_ORDERSERVICE=http://localhost:8084
     ports:
       - target: 8081
         published: 8081
