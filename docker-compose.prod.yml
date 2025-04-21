@@ -21,7 +21,9 @@ services:
         protocol: tcp
         mode: host
     networks:
-      - homerep-network
+      homerep-network:
+        aliases:
+          - postgres-auth
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
@@ -35,7 +37,7 @@ services:
         condition: any
     image: registry.gitlab.com/homerep/auth_server:${AUTH_APP_TAG}
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://homerep_postgres_container_authtest:5432/homerep_auth
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-auth:5432/homerep_auth
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=postgres
       - SPRING_JPA_HIBERNATE_DDL_AUTO=create-drop
@@ -43,8 +45,8 @@ services:
       - HOMEREP_LIFETIME=600000
       - SERVER_ADDRESS=0.0.0.0
       - SERVER_PORT=8081
-      - HOMEREP_USERSERVICE=http://localhost:8083
-      - HOMEREP_ORDERSERVICE=http://localhost:8084
+      - HOMEREP_USERSERVICE=http://user-service:8083
+      - HOMEREP_ORDERSERVICE=http://order-service:8084
     ports:
       - target: 8081
         published: 8081
@@ -62,7 +64,7 @@ services:
         condition: any
     image: registry.gitlab.com/homerep/userservice:${USER_SERVICE_APP_TAG}
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://homerep_postgres_container_authtest:5432/homerep_userservice
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-auth:5432/homerep_userservice
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=postgres
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
@@ -75,7 +77,9 @@ services:
         protocol: tcp
         mode: host
     networks:
-      - homerep-network
+      homerep-network:
+        aliases:
+          - user-service
     depends_on:
       - postgres_container_authtest
 
@@ -264,7 +268,7 @@ services:
         condition: any
     image: registry.gitlab.com/homerep/order_service:${ORDER_SERVICE_APP_TAG}
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://homerep_postgres_container_authtest:5432/homerep_orders
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-auth:5432/homerep_orders
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=postgres
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
@@ -279,7 +283,9 @@ services:
         protocol: tcp
         mode: host
     networks:
-      - homerep-network
+      homerep-network:
+        aliases:
+          - order-service
     depends_on:
       - postgres_container_authtest
 
