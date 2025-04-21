@@ -43,7 +43,6 @@ services:
       - SPRING_JPA_HIBERNATE_DDL_AUTO=create-drop
       - HOMEREP_SECRET=yo78DOlDodontCrackPleaseASdujisdufasbasu
       - HOMEREP_LIFETIME=600000
-      - SERVER_ADDRESS=0.0.0.0
       - SERVER_PORT=8081
       - HOMEREP_USERSERVICE=http://user-service:8083
       - HOMEREP_ORDERSERVICE=http://order-service:8084
