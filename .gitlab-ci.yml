@@ -90,4 +90,4 @@ deploy:
     # Деплой в Docker Swarm
     - sudo docker stack deploy -c docker-compose.gen.yml homerep
   tags:
-    - cloudru1
+    - cloudru
