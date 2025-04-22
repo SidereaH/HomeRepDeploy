@@ -3,6 +3,12 @@ variables:
 
 deploy:
   stage: deploy
+  retry:
+    max: 2  # Максимальное количество попыток
+    when:
+      - script_failure  # Перезапускать при ошибке в script
+      - api_failure     # Перезапускать при проблемах с API GitLab
+      - runner_system_failure
   script:
     - sudo docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     
