@@ -48,7 +48,7 @@ services:
       - HOMEREP_ORDERSERVICE=http://order-service:8084
       - SERVER_HTTP2_ENABLED=false
       - SERVER_TOMCAT_DISABLE_UPLOAD_TIMEOUT=true
-      - SERVER_TOMCAT_KEEP_ALIVE_TIMEPUT=60000
+      - SERVER_TOMCAT_KEEP_ALIVE_TIMEOUT=60000
     ports:
       - target: 8081
         published: 8081
