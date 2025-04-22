@@ -148,7 +148,9 @@ services:
       retries: 5
       start_period: 10s
     networks:
-      - homerep-network
+      homerep-network:
+        aliases:
+          - postgres-location
 
   grpc-location-server:
     deploy:
@@ -162,7 +164,7 @@ services:
         protocol: tcp
         mode: host
     environment:
-      DB_HOST: timescale_location_db
+      DB_HOST: postgres-location
       DB_PORT: 5432
       DB_USER: user
       DB_PASSWORD: password
