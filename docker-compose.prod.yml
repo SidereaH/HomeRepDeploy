@@ -173,8 +173,7 @@ services:
     networks:
       - homerep-network
     depends_on:
-      timescale_location_db:
-        condition: service_healthy
+      - timescale_location_db
 
   zookeeper:
     deploy:
