@@ -35,6 +35,7 @@ deploy:
     - export DB_ADDRESS_CLOUD=$DB_ADDRESS_CLOUD
     - export DB_NAME_CLOUD=$DB_NAME_CLOUD
     - export API_ADDRESS_CLOUD=$API_ADDRESS_CLOUD
+    - export YANDEX_GEOCODE=$YANDEX_GEOCODE
     
     # Проверяем, что переменные правильно установлены
     - echo "USER_SERVICE_APP_TAG=${USER_SERVICE_APP_TAG}"
