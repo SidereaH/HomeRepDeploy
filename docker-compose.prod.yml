@@ -139,13 +139,14 @@ services:
       POSTGRES_DB: location_service
     ports:
       - target: 5432
-        published: 5433
+        published: 5432
         protocol: tcp
         mode: host
     healthcheck:
-      test: [ "CMD", "pg_isready", "-U", "user", "-d", "location_service" ]
-      interval: 10s
-      retries: 5
+      test: ["CMD-SHELL", "pg_isready -U user -d location_service"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
       start_period: 10s
     networks:
       homerep-network:
@@ -172,7 +173,8 @@ services:
     networks:
       - homerep-network
     depends_on:
-      - timescale_location_db
+      timescale_location_db:
+        condition: service_healthy
 
   zookeeper:
     deploy:
