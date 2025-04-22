@@ -302,6 +302,9 @@ services:
 networks:
   homerep-network:
     driver: overlay
+    attachable: true
+    driver_opts:
+      encrypted: ""
 
 volumes:
   postgres-data:
