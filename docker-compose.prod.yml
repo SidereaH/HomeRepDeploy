@@ -74,6 +74,8 @@ services:
       - HOMEREP_SECRET=yo78DolDoldontCrackPleaseASdujisdufasbasu
       - HOMEREP_LIFETIME=600000
       - SERVER_PORT=8083
+      - GRPC_CLIENT_LOCATION_SERVICE_ADDRESS=static://userlocation:50051
+      - GRPC_CLIENT_LOCATION_SERVICE_NEGOTIATION_TYPE=plaintext
     ports:
       - target: 8083
         published: 8083
@@ -171,7 +173,9 @@ services:
       DB_PASSWORD: password
       DB_NAME: location_service
     networks:
-      - homerep-network
+      homerep-network:
+        aliases:
+          - userlocation
     depends_on:
       - timescale_location_db
 
