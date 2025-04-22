@@ -74,7 +74,7 @@ services:
       - HOMEREP_SECRET=yo78DolDoldontCrackPleaseASdujisdufasbasu
       - HOMEREP_LIFETIME=600000
       - SERVER_PORT=8083
-      - GRPC_CLIENT_LOCATION_SERVICE_ADDRESS=dns://userlocation:50051
+      - GRPC_CLIENT_LOCATION_SERVICE_ADDRESS=dns:///userlocation:50051
       - GRPC_CLIENT_LOCATION_SERVICE_NEGOTIATION_TYPE=plaintext
     ports:
       - target: 8083
