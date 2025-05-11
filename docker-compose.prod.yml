@@ -40,7 +40,7 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-auth:5432/homerep_auth
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=postgres
-      - SPRING_JPA_HIBERNATE_DDL_AUTO=create-drop
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
       - HOMEREP_SECRET=yo78DOlDodontCrackPleaseASdujisdufasbasu
       - HOMEREP_LIFETIME=600000
       - SERVER_ADDRESS=0.0.0.0
@@ -70,7 +70,7 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-auth:5432/homerep_userservice
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=postgres
-      - SPRING_JPA_HIBERNATE_DDL_AUTO=create-drop
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
       - HOMEREP_SECRET=yo78DolDoldontCrackPleaseASdujisdufasbasu
       - HOMEREP_LIFETIME=600000
       - SERVER_PORT=8083
