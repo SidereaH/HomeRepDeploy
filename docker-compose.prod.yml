@@ -87,6 +87,7 @@ services:
           - user-service
     depends_on:
       - postgres_container_authtest
+      - grpc-location-server
 
   redis-photos:
     deploy:
