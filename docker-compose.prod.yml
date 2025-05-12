@@ -37,7 +37,7 @@ services:
         condition: any
     image: registry.gitlab.com/homerep/auth_server:${AUTH_APP_TAG}
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres_container_authtest:5432/homerep_auth
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://homerep-infra_postgres_container_authtest:5432/homerep_auth
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=postgres
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
@@ -68,7 +68,7 @@ services:
         condition: any
     image: registry.gitlab.com/homerep/userservice:${USER_SERVICE_APP_TAG}
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres_container_authtest:5432/homerep_userservice
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://homerep-infra_postgres_container_authtest:5432/homerep_userservice
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=postgres
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
@@ -173,7 +173,7 @@ services:
         protocol: tcp
         mode: host
     environment:
-      DB_HOST: timescale_location_db
+      DB_HOST: homerep-infra_timescale_location_db
       DB_PORT: 5432
       DB_USER: user
       DB_PASSWORD: password
@@ -286,7 +286,7 @@ services:
         condition: any
     image: registry.gitlab.com/homerep/order_service:${ORDER_SERVICE_APP_TAG}
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres_container_authtest:5432/homerep_orders
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://homerep-infra_postgres_container_authtest:5432/homerep_orders
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=postgres
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
