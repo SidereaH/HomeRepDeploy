@@ -37,7 +37,7 @@ services:
         condition: any
     image: registry.gitlab.com/homerep/auth_server:${AUTH_APP_TAG}
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5455/homerep_auth
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres_container_authtest:5432/homerep_auth
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=postgres
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
@@ -57,6 +57,7 @@ services:
         mode: host
     networks:
       - homerep-network
+      - homerep-global-network 
     depends_on:
       - postgres_container_authtest
 
@@ -67,7 +68,7 @@ services:
         condition: any
     image: registry.gitlab.com/homerep/userservice:${USER_SERVICE_APP_TAG}
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-auth:5432/homerep_userservice
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres_container_authtest:5432/homerep_userservice
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=postgres
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
@@ -85,6 +86,8 @@ services:
       homerep-network:
         aliases:
           - user-service
+      homerep-global-network:
+
     depends_on:
       - postgres_container_authtest
       - grpc-location-server
@@ -127,6 +130,8 @@ services:
         mode: host
     networks:
       - homerep-network
+      - homerep-global-network 
+
     depends_on:
       - redis-photos
 
@@ -168,8 +173,8 @@ services:
         protocol: tcp
         mode: host
     environment:
-      DB_HOST: localhost
-      DB_PORT: 5454
+      DB_HOST: timescale_location_db
+      DB_PORT: 5432
       DB_USER: user
       DB_PASSWORD: password
       DB_NAME: location_service
@@ -177,6 +182,8 @@ services:
       homerep-network:
         aliases:
           - userlocation
+      homerep-global-network:
+      
     depends_on:
       - timescale_location_db
 
@@ -279,14 +286,14 @@ services:
         condition: any
     image: registry.gitlab.com/homerep/order_service:${ORDER_SERVICE_APP_TAG}
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-auth:5432/homerep_orders
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres_container_authtest:5432/homerep_orders
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=postgres
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka1:19092,kafka2:19093
       - SPRING_KAFKA_PRODUCER_KEY_SERIALIZER=org.apache.kafka.common.serialization.StringSerializer
       - SPRING_KAFKA_PRODUCER_VALUE_SERIALIZER=org.springframework.kafka.support.serializer.JsonSerializer
-      - GRPC_SERVER_PORT=9091
+      - GRPC_SERVER_PORT=9091гыук
       - SERVER_PORT=8084
       - HOMEREP_YANDEX_GEO=${YANDEX_GEOCODE}
     ports:
@@ -305,8 +312,8 @@ networks:
   homerep-network:
     driver: overlay
     attachable: true
-    driver_opts:
-      encrypted: ""
+  homerep-global-network:
+    external: true
 
 volumes:
   postgres-data:
