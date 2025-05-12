@@ -1,34 +1,34 @@
 version: '3.8'
 
 services:
-  postgres_container_authtest:
-    image: postgres:15
-    deploy:
-      replicas: 1
-      restart_policy:
-        condition: on-failure
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: postgres
-      PGDATA: /data/postgres
-    volumes:
-      - postgres-data:/data/postgres
-      - ./initdb:/docker-entrypoint-initdb.d
-    ports:
-      - target: 5432
-        published: 5434
-        protocol: tcp
-        mode: host
-    networks:
-      homerep-network:
-        aliases:
-          - postgres-auth
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+  # postgres_container_authtest:
+  #   image: postgres:15
+  #   deploy:
+  #     replicas: 1
+  #     restart_policy:
+  #       condition: on-failure
+  #   environment:
+  #     POSTGRES_USER: postgres
+  #     POSTGRES_PASSWORD: postgres
+  #     POSTGRES_DB: postgres
+  #     PGDATA: /data/postgres
+  #   volumes:
+  #     - postgres-data:/data/postgres
+  #     - ./initdb:/docker-entrypoint-initdb.d
+  #   ports:
+  #     - target: 5432
+  #       published: 5434
+  #       protocol: tcp
+  #       mode: host
+  #   networks:
+  #     homerep-network:
+  #       aliases:
+  #         - postgres-auth
+  #   healthcheck:
+  #     test: ["CMD-SHELL", "pg_isready -U postgres"]
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 5
 
   auth-service:
     deploy:
@@ -37,7 +37,7 @@ services:
         condition: any
     image: registry.gitlab.com/homerep/auth_server:${AUTH_APP_TAG}
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-auth:5432/homerep_auth
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5455/homerep_auth
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=postgres
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
@@ -130,31 +130,31 @@ services:
     depends_on:
       - redis-photos
 
-  timescale_location_db:
-    deploy:
-      replicas: 1
-      restart_policy:
-        condition: on-failure
-    image: timescale/timescaledb:latest-pg15
-    environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: location_service
-    ports:
-      - target: 5432
-        published: 5432
-        protocol: tcp
-        mode: host
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U user -d location_service"]
-      interval: 5s
-      timeout: 5s
-      retries: 10
-      start_period: 10s
-    networks:
-      homerep-network:
-        aliases:
-          - postgres-location
+  # timescale_location_db:
+  #   deploy:
+  #     replicas: 1
+  #     restart_policy:
+  #       condition: on-failure
+  #   image: timescale/timescaledb:latest-pg15
+  #   environment:
+  #     POSTGRES_USER: user
+  #     POSTGRES_PASSWORD: password
+  #     POSTGRES_DB: location_service
+  #   ports:
+  #     - target: 5432
+  #       published: 5432
+  #       protocol: tcp
+  #       mode: host
+  #   healthcheck:
+  #     test: ["CMD-SHELL", "pg_isready -U user -d location_service"]
+  #     interval: 5s
+  #     timeout: 5s
+  #     retries: 10
+  #     start_period: 10s
+  #   networks:
+  #     homerep-network:
+  #       aliases:
+  #         - postgres-location
 
   grpc-location-server:
     deploy:
@@ -168,8 +168,8 @@ services:
         protocol: tcp
         mode: host
     environment:
-      DB_HOST: postgres-location
-      DB_PORT: 5432
+      DB_HOST: localhost
+      DB_PORT: 5454
       DB_USER: user
       DB_PASSWORD: password
       DB_NAME: location_service
