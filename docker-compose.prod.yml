@@ -60,6 +60,9 @@ services:
       - homerep-global-network 
     depends_on:
       - postgres_container_authtest
+      - order-service
+      - user-service
+      - grpc-location-server
 
   user-service:
     deploy:
@@ -305,6 +308,7 @@ services:
       homerep-network:
         aliases:
           - order-service
+      homerep-global-network:
     depends_on:
       - postgres_container_authtest
 
