@@ -296,7 +296,7 @@ services:
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka1:19092,kafka2:19093
       - SPRING_KAFKA_PRODUCER_KEY_SERIALIZER=org.apache.kafka.common.serialization.StringSerializer
       - SPRING_KAFKA_PRODUCER_VALUE_SERIALIZER=org.springframework.kafka.support.serializer.JsonSerializer
-      - GRPC_SERVER_PORT=9091гыук
+      - GRPC_SERVER_PORT=9091
       - SERVER_PORT=8084
       - HOMEREP_YANDEX_GEO=${YANDEX_GEOCODE}
     ports:
