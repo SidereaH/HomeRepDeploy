@@ -299,6 +299,8 @@ services:
       - GRPC_SERVER_PORT=9091
       - SERVER_PORT=8084
       - HOMEREP_YANDEX_GEO=${YANDEX_GEOCODE}
+      - GRPC_CLIENT_LOCATION_SERVICE_ADDRESS=dns:///userlocation:50051
+      - GRPC_CLIENT_LOCATION_SERVICE_NEGOTIATION_TYPE=plaintext
     ports:
       - target: 8084
         published: 8084
