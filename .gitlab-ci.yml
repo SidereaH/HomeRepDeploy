@@ -1,5 +1,7 @@
 variables:
   CI_REGISTRY: "registry.gitlab.com"
+  HOMEREP_MAIL_PASSWORD: ${HOMEREP_MAIL_PASSWORD}
+  HOMEREP_MAIL_SENDER: ${HOMEREP_MAIL_SENDER}
 
 deploy:
   stage: deploy
