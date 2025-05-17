@@ -313,39 +313,39 @@ services:
       homerep-global-network:
     depends_on:
       - postgres_container_authtest
-mail-service:
-  deploy:
-    replicas: 1
-    restart_policy:
-      condition: any
-  image: registry.gitlab.com/homerep/codesender:latest
-  environment:
-    - SPRING_APPLICATION_NAME=HomeRepCodeSender
-    - SPRING_DATASOURCE_URL=jdbc:postgresql://homerep-infra_postgres_container_authtest:5432/homerep_notif
-    - SPRING_DATASOURCE_USERNAME=postgres
-    - SPRING_DATASOURCE_PASSWORD=postgres
-    - SPRING_JPA_DATABASE-PLATFORM=org.hibernate.dialect.PostgreSQLDialect
-    - SPRING_JPA_SHOW-SQL=true
-    - SPRING_JPA_HIBERNATE_DDL-AUTO=create-drop
-    - SPRING_MAIL_PROPERTIES_MAIL_SMTP_SSL_TRUST=smtp.mail.ru
-    - SPRING_KAFKA_BOOTSTRAP-SERVERS=kafka1:19092,kafka2:19093
-    - SPRING_KAFKA_PRODUCER_KEY-SERIALIZER=org.apache.kafka.common.serialization.StringSerializer
-    - SPRING_KAFKA_PRODUCER_VALUE-SERIALIZER=org.springframework.kafka.support.serializer.JsonSerializer
-    - HOMEREP_MAIL_PASSWORD=${HOMEREP_MAIL_PASSWORD}
-    - HOMEREP_MAIL_SENDER=${HOMEREP_MAIL_SENDER}
-    - SERVER_PORT=8081
-  ports:
-    - target: 8081
-      published: 8081
-      protocol: tcp
-      mode: host
-  networks:
-    - homerep-network
-    - homerep-global-network
-  depends_on:
-    - kafka1
-    - kafka2
-    - postgres_container_docsmail
+  mail-service:
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: any
+    image: registry.gitlab.com/homerep/codesender:latest
+    environment:
+      - SPRING_APPLICATION_NAME=HomeRepCodeSender
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://homerep-infra_postgres_container_authtest:5432/homerep_notif
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+      - SPRING_JPA_DATABASE-PLATFORM=org.hibernate.dialect.PostgreSQLDialect
+      - SPRING_JPA_SHOW-SQL=true
+      - SPRING_JPA_HIBERNATE_DDL-AUTO=create-drop
+      - SPRING_MAIL_PROPERTIES_MAIL_SMTP_SSL_TRUST=smtp.mail.ru
+      - SPRING_KAFKA_BOOTSTRAP-SERVERS=kafka1:19092,kafka2:19093
+      - SPRING_KAFKA_PRODUCER_KEY-SERIALIZER=org.apache.kafka.common.serialization.StringSerializer
+      - SPRING_KAFKA_PRODUCER_VALUE-SERIALIZER=org.springframework.kafka.support.serializer.JsonSerializer
+      - HOMEREP_MAIL_PASSWORD=${HOMEREP_MAIL_PASSWORD}
+      - HOMEREP_MAIL_SENDER=${HOMEREP_MAIL_SENDER}
+      - SERVER_PORT=8081
+    ports:
+      - target: 8081
+        published: 8081
+        protocol: tcp
+        mode: host
+    networks:
+      - homerep-network
+      - homerep-global-network
+    depends_on:
+      - kafka1
+      - kafka2
+      - postgres_container_docsmail
 networks:
   homerep-network:
     driver: overlay
