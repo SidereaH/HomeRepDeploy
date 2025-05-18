@@ -335,8 +335,8 @@ services:
       - HOMEREP_MAIL_SENDER=${HOMEREP_MAIL_SENDER}
       - SERVER_PORT=8088
     ports:
-      - target: 8081
-        published: 8081
+      - target: 8088
+        published: 8088
         protocol: tcp
         mode: host
     networks:
