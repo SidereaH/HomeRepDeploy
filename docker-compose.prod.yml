@@ -333,7 +333,7 @@ services:
       - SPRING_KAFKA_PRODUCER_VALUE-SERIALIZER=org.springframework.kafka.support.serializer.JsonSerializer
       - HOMEREP_MAIL_PASSWORD=${HOMEREP_MAIL_PASSWORD}
       - HOMEREP_MAIL_SENDER=${HOMEREP_MAIL_SENDER}
-      - SERVER_PORT=8081
+      - SERVER_PORT=8088
     ports:
       - target: 8081
         published: 8081
