@@ -301,6 +301,7 @@ services:
       - HOMEREP_YANDEX_GEO=${YANDEX_GEOCODE}
       - GRPC_CLIENT_LOCATION_SERVICE_ADDRESS=dns:///userlocation:50051
       - GRPC_CLIENT_LOCATION_SERVICE_NEGOTIATION_TYPE=plaintext
+      - HOMEREP_USERSERVICE=http://user-service:8083
     ports:
       - target: 8084
         published: 8084
