@@ -303,6 +303,7 @@ services:
       - SPRING_DATASOURCE_PASSWORD=postgres
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka1:19092,kafka2:19093
+      - SPRING_KAFKA_BOOTSTRAP-SERVERS=kafka1:19092,kafka2:19093
       - SPRING_KAFKA_PRODUCER_KEY-SERIALIZER=org.apache.kafka.common.serialization.StringSerializer
       - SPRING_KAFKA_PRODUCER_VALUE-SERIALIZER=org.springframework.kafka.support.serializer.JsonSerializer
       - GRPC_SERVER_PORT=9091
