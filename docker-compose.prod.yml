@@ -36,7 +36,7 @@ services:
       restart_policy:
         condition: any
         delay: 5s  
-        max-attempts: 10
+
     image: registry.gitlab.com/homerep/auth_server:${AUTH_APP_TAG}
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres_container_authtest:5432/homerep_auth
@@ -102,7 +102,7 @@ services:
       restart_policy:
         condition: any
         delay: 5s  
-        max-attempts: 10
+
     image: redis:latest
     environment:
       - REDIS_PASSWORD=${DB_PASSWORD_CLOUD}
@@ -123,7 +123,7 @@ services:
       restart_policy:
         condition: any
         delay: 5s  
-        max-attempts: 10
+
     image: registry.gitlab.com/homerep/image_cloud:${CLOUD_APP_TAG}
     environment:
       - API_PORT=${API_PORT_CLOUD}
@@ -175,7 +175,7 @@ services:
       restart_policy:
         condition: any
         delay: 5s  
-        max-attempts: 10
+
     image: registry.gitlab.com/homerep/user_location_service:${LOCATION_APP_TAG}
     ports:
       - target: 50051
@@ -295,7 +295,7 @@ services:
       restart_policy:
         condition: any
         delay: 5s  
-        max-attempts: 10
+
     image: registry.gitlab.com/homerep/order_service:${ORDER_SERVICE_APP_TAG}
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres_container_authtest:5432/homerep_orders
@@ -329,7 +329,7 @@ services:
       restart_policy:
         condition: any
         delay: 5s  
-        max-attempts: 10
+
     image: registry.gitlab.com/homerep/codesender:latest
     environment:
       - SPRING_APPLICATION_NAME=HomeRepCodeSender
