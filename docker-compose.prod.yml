@@ -35,9 +35,11 @@ services:
       replicas: 1
       restart_policy:
         condition: any
+        delay: 5s  
+        max-attempts: 10
     image: registry.gitlab.com/homerep/auth_server:${AUTH_APP_TAG}
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://homerep-infra_postgres_container_authtest:5432/homerep_auth
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres_container_authtest:5432/homerep_auth
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=postgres
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
@@ -70,7 +72,7 @@ services:
         condition: any
     image: registry.gitlab.com/homerep/userservice:${USER_SERVICE_APP_TAG}
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://homerep-infra_postgres_container_authtest:5432/homerep_userservice
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres_container_authtest:5432/homerep_userservice
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=postgres
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
@@ -99,6 +101,8 @@ services:
       replicas: 1
       restart_policy:
         condition: any
+        delay: 5s  
+        max-attempts: 10
     image: redis:latest
     environment:
       - REDIS_PASSWORD=${DB_PASSWORD_CLOUD}
@@ -118,6 +122,8 @@ services:
       replicas: 1
       restart_policy:
         condition: any
+        delay: 5s  
+        max-attempts: 10
     image: registry.gitlab.com/homerep/image_cloud:${CLOUD_APP_TAG}
     environment:
       - API_PORT=${API_PORT_CLOUD}
@@ -168,6 +174,8 @@ services:
       replicas: 1
       restart_policy:
         condition: any
+        delay: 5s  
+        max-attempts: 10
     image: registry.gitlab.com/homerep/user_location_service:${LOCATION_APP_TAG}
     ports:
       - target: 50051
@@ -175,7 +183,7 @@ services:
         protocol: tcp
         mode: host
     environment:
-      DB_HOST: homerep-infra_timescale_location_db
+      DB_HOST: timescale_location_db
       DB_PORT: 5432
       DB_USER: user
       DB_PASSWORD: password
@@ -286,13 +294,15 @@ services:
       replicas: 1
       restart_policy:
         condition: any
+        delay: 5s  
+        max-attempts: 10
     image: registry.gitlab.com/homerep/order_service:${ORDER_SERVICE_APP_TAG}
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://homerep-infra_postgres_container_authtest:5432/homerep_orders
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres_container_authtest:5432/homerep_orders
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=postgres
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
-      - SPRING_KAFKA_BOOTSTRAP_SERVERS=homerep-infra_kafka1:19092,homerep-infra_kafka2:19093
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka1:19092,kafka2:19093
       - SPRING_KAFKA_PRODUCER_KEY-SERIALIZER=org.apache.kafka.common.serialization.StringSerializer
       - SPRING_KAFKA_PRODUCER_VALUE-SERIALIZER=org.springframework.kafka.support.serializer.JsonSerializer
       - GRPC_SERVER_PORT=9091
@@ -318,17 +328,19 @@ services:
       replicas: 1
       restart_policy:
         condition: any
+        delay: 5s  
+        max-attempts: 10
     image: registry.gitlab.com/homerep/codesender:latest
     environment:
       - SPRING_APPLICATION_NAME=HomeRepCodeSender
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://homerep-infra_postgres_container_authtest:5432/homerep_notif
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres_container_authtest:5432/homerep_notif
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=postgres
       - SPRING_JPA_DATABASE-PLATFORM=org.hibernate.dialect.PostgreSQLDialect
       - SPRING_JPA_SHOW-SQL=true
       - SPRING_JPA_HIBERNATE_DDL-AUTO=update
       - SPRING_MAIL_PROPERTIES_MAIL_SMTP_SSL_TRUST=smtp.mail.ru
-      - SPRING_KAFKA_BOOTSTRAP-SERVERS=homerep-infra_kafka1:19092,homerep-infra_kafka2:19093
+      - SPRING_KAFKA_BOOTSTRAP-SERVERS=kafka1:19092,kafka2:19093
       - SPRING_KAFKA_PRODUCER_KEY-SERIALIZER=org.apache.kafka.common.serialization.StringSerializer
       - SPRING_KAFKA_PRODUCER_VALUE-SERIALIZER=org.springframework.kafka.support.serializer.JsonSerializer
       - HOMEREP_MAIL_PASSWORD=${HOMEREP_MAIL_PASSWORD}
