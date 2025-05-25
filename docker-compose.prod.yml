@@ -59,7 +59,6 @@ services:
       - homerep-network
       - homerep-global-network 
     depends_on:
-      - postgres_container_authtest
       - order-service
       - user-service
       - grpc-location-server
@@ -190,97 +189,97 @@ services:
     depends_on:
       - timescale_location_db
 
-  zookeeper:
-    deploy:
-      replicas: 1
-      restart_policy:
-        condition: any
-    image: confluentinc/cp-zookeeper:7.4.0
-    ports:
-      - target: 2181
-        published: 2181
-        protocol: tcp
-        mode: host
-    environment:
-      ZOOKEEPER_CLIENT_PORT: 2181
-      ZOOKEEPER_TICK_TIME: 2000
-    networks:
-      - homerep-network
+  # zookeeper:
+  #   deploy:
+  #     replicas: 1
+  #     restart_policy:
+  #       condition: any
+  #   image: confluentinc/cp-zookeeper:7.4.0
+  #   ports:
+  #     - target: 2181
+  #       published: 2181
+  #       protocol: tcp
+  #       mode: host
+  #   environment:
+  #     ZOOKEEPER_CLIENT_PORT: 2181
+  #     ZOOKEEPER_TICK_TIME: 2000
+  #   networks:
+  #     - homerep-network
 
-  kafka1:
-    deploy:
-      replicas: 1
-      restart_policy:
-        condition: on-failure
-    image: confluentinc/cp-kafka:7.4.0
-    ports:
-      - target: 9092
-        published: 9092
-        protocol: tcp
-        mode: host
-      - target: 19092
-        published: 19092
-        protocol: tcp
-        mode: host
-    environment:
-      KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka1:19092,PLAINTEXT_HOST://kafka1:9092
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-    networks:
-      - homerep-network
-    depends_on:
-      - zookeeper
+  # kafka1:
+  #   deploy:
+  #     replicas: 1
+  #     restart_policy:
+  #       condition: on-failure
+  #   image: confluentinc/cp-kafka:7.4.0
+  #   ports:
+  #     - target: 9092
+  #       published: 9092
+  #       protocol: tcp
+  #       mode: host
+  #     - target: 19092
+  #       published: 19092
+  #       protocol: tcp
+  #       mode: host
+  #   environment:
+  #     KAFKA_BROKER_ID: 1
+  #     KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+  #     KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka1:19092,PLAINTEXT_HOST://kafka1:9092
+  #     KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+  #     KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+  #     KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+  #   networks:
+  #     - homerep-network
+  #   depends_on:
+  #     - zookeeper
 
-  kafka2:
-    deploy:
-      replicas: 1
-      restart_policy:
-        condition: on-failure
-    image: confluentinc/cp-kafka:7.4.0
-    ports:
-      - target: 9093
-        published: 9093
-        protocol: tcp
-        mode: host
-      - target: 19093
-        published: 19093
-        protocol: tcp
-        mode: host
-    environment:
-      KAFKA_BROKER_ID: 2
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka2:19093,PLAINTEXT_HOST://kafka2:9093
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-    networks:
-      - homerep-network
-    depends_on:
-      - zookeeper
+  # kafka2:
+  #   deploy:
+  #     replicas: 1
+  #     restart_policy:
+  #       condition: on-failure
+  #   image: confluentinc/cp-kafka:7.4.0
+  #   ports:
+  #     - target: 9093
+  #       published: 9093
+  #       protocol: tcp
+  #       mode: host
+  #     - target: 19093
+  #       published: 19093
+  #       protocol: tcp
+  #       mode: host
+  #   environment:
+  #     KAFKA_BROKER_ID: 2
+  #     KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+  #     KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka2:19093,PLAINTEXT_HOST://kafka2:9093
+  #     KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+  #     KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+  #     KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+  #   networks:
+  #     - homerep-network
+  #   depends_on:
+  #     - zookeeper
 
-  kafka-ui:
-    deploy:
-      replicas: 1
-      restart_policy:
-        condition: on-failure
-    image: provectuslabs/kafka-ui:latest
-    ports:
-      - target: 8080
-        published: 8080
-        protocol: tcp
-        mode: host
-    environment:
-      KAFKA_CLUSTERS_0_NAME: local-kafka
-      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka1:19092,kafka2:19093
-      KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181
-    networks:
-      - homerep-network
-    depends_on:
-      - kafka1
-      - kafka2
+  # kafka-ui:
+  #   deploy:
+  #     replicas: 1
+  #     restart_policy:
+  #       condition: on-failure
+  #   image: provectuslabs/kafka-ui:latest
+  #   ports:
+  #     - target: 8080
+  #       published: 8080
+  #       protocol: tcp
+  #       mode: host
+  #   environment:
+  #     KAFKA_CLUSTERS_0_NAME: local-kafka
+  #     KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka1:19092,kafka2:19093
+  #     KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181
+  #   networks:
+  #     - homerep-network
+  #   depends_on:
+  #     - kafka1
+  #     - kafka2
 
   order-service:
     deploy:
@@ -293,7 +292,7 @@ services:
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=postgres
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
-      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka1:19092,kafka2:19093
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=homerep-infra_kafka1:19092,homerep-infra_kafka2:19093
       - SPRING_KAFKA_PRODUCER_KEY-SERIALIZER=org.apache.kafka.common.serialization.StringSerializer
       - SPRING_KAFKA_PRODUCER_VALUE-SERIALIZER=org.springframework.kafka.support.serializer.JsonSerializer
       - GRPC_SERVER_PORT=9091
@@ -329,7 +328,7 @@ services:
       - SPRING_JPA_SHOW-SQL=true
       - SPRING_JPA_HIBERNATE_DDL-AUTO=update
       - SPRING_MAIL_PROPERTIES_MAIL_SMTP_SSL_TRUST=smtp.mail.ru
-      - SPRING_KAFKA_BOOTSTRAP-SERVERS=kafka1:19092,kafka2:19093
+      - SPRING_KAFKA_BOOTSTRAP-SERVERS=homerep-infra_kafka1:19092,homerep-infra_kafka2:19093
       - SPRING_KAFKA_PRODUCER_KEY-SERIALIZER=org.apache.kafka.common.serialization.StringSerializer
       - SPRING_KAFKA_PRODUCER_VALUE-SERIALIZER=org.springframework.kafka.support.serializer.JsonSerializer
       - HOMEREP_MAIL_PASSWORD=${HOMEREP_MAIL_PASSWORD}
@@ -344,10 +343,6 @@ services:
     networks:
       - homerep-network
       - homerep-global-network
-    depends_on:
-      - kafka1
-      - kafka2
-      - postgres_container_docsmail
 networks:
   homerep-network:
     driver: overlay
