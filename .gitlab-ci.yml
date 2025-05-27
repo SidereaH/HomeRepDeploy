@@ -52,7 +52,7 @@ deploy:
     - echo "API_ADDRESS_CLOUD=$API_ADDRESS_CLOUD"
     - |
       echo "Removing Docker stack 'homerep'..."
-      if sudo docker stack ls | grep -q 'homerep'; then
+      if sudo docker stack ls | grep homerep; then
         if sudo docker stack rm homerep; then
           echo "Stack 'homerep' removed successfully."
         else
