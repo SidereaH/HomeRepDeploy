@@ -1,5 +1,5 @@
 # Deploy
-
+[![wakatime](https://wakatime.com/badge/user/ce63b378-df01-4480-af66-a4f584b910ad/project/78fd3177-e8e7-4ccc-a2d6-efff51525a5d.svg)](https://wakatime.com/badge/user/ce63b378-df01-4480-af66-a4f584b910ad/project/78fd3177-e8e7-4ccc-a2d6-efff51525a5d)
 
 
 ## Getting started
