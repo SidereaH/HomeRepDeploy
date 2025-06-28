@@ -1,10 +1,7 @@
 # Deploy
 [![wakatime](https://wakatime.com/badge/user/ce63b378-df01-4480-af66-a4f584b910ad/project/78fd3177-e8e7-4ccc-a2d6-efff51525a5d.svg)](https://wakatime.com/badge/user/ce63b378-df01-4480-af66-a4f584b910ad/project/78fd3177-e8e7-4ccc-a2d6-efff51525a5d)
 
-Here's a beautifully styled version of your README with enhanced formatting and visual elements:
-
-```markdown
-# 🏠 HomeRep Deployment Repository  
+Deployment Repository  
 
 ![Docker](https://img.shields.io/badge/Docker-20.10%2B-blue)
 ![Swarm](https://img.shields.io/badge/Docker%20Swarm-3.0%2B-important)
