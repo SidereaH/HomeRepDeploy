@@ -19,17 +19,20 @@ This repository contains the **CI/CD configuration** and deployment scripts for 
 
 The HomeRep platform consists of the following core services:  
 
-| Service | Description |  
-|---------|-------------|  
-| 🔐 **Auth Service** | Handles user authentication and authorization |  
-| 👤 **User Service** | Manages user profiles and information |  
-| 📦 **Order Service** | Processes repair orders and connects homeowners with craftsmen |  
-| 📍 **Location Service** | Provides geolocation functionality |  
-| ☁️ **Cloud Service** | Handles image storage and retrieval |  
-| ✉️ **Mail Service** | Manages email notifications and verification |  
-| 🚀 **Redis** | Used for caching and temporary storage |  
-| 🐘 **PostgreSQL** | Primary database for most services |  
-| ⏱ **TimescaleDB** | Time-series database for location data |  
+| Service | Description | Repository |  
+|---------|-------------|------------|
+| 🔐 **Auth Service** | Handles user authentication and authorization | [auth_server](https://gitlab.com/homerep/auth_server) |  
+| 👤 **User Service** | Manages user profiles and information | [userservice](https://gitlab.com/homerep/userservice) |  
+| 📦 **Order Service** | Processes repair orders and connects homeowners with craftsmen | [order_service](https://gitlab.com/homerep/order_service) |  
+| 📍 **Location Service** | Provides geolocation functionality | [user_location_service](https://gitlab.com/homerep/user_location_service) |  
+| ☁️ **Cloud Service** | Handles image storage and retrieval | [image_cloud](https://gitlab.com/homerep/image_cloud) |  
+| ✉️ **Mail Service** | Manages email notifications and verification | [codesender](https://gitlab.com/homerep/codesender) |  
+| 🖥 **Admin Panel** | Administrative interface for system management | [adminpanel](https://gitlab.com/homerep/adminpanel) |  
+| 🚀 **Redis** | Used for caching and temporary storage | *Infrastructure component* |  
+| 🐘 **PostgreSQL** | Primary database for most services | *Infrastructure component* |  
+| ⏱ **TimescaleDB** | Time-series database for location data | *Infrastructure component* |  
+
+🔗 *All repositories are part of the [HomeRep group](https://gitlab.com/homerep)*
 
 ---
 
